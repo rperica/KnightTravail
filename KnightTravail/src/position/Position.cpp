@@ -29,4 +29,10 @@ namespace KnightTravail
 	{
 		return p1.coordinate->x == p2.coordinate->x && p1.coordinate->y == p2.coordinate->y;
 	}
+
+	std::ostream& operator<<(std::ostream& out, const Position& p)
+	{
+		out << "Distance:" << p.m_distance << " X:" << p.coordinate->x << " Y:" << p.coordinate->y;
+		return out;
+	}
 }
