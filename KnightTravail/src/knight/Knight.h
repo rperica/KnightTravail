@@ -2,14 +2,19 @@
 
 #include "position/Position.h"
 
+#include <vector>
+
 namespace KnightTravail
 {
 	class Knight
 	{
-	public:
+	private:
 		Position* m_start;
 		Position* m_destination;
 
+		std::vector<Position*> m_visitedPositions;
+
+	public:
 		Knight(const Knight&) = delete;
 
 		Knight();

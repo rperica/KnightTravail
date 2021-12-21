@@ -1,6 +1,7 @@
 #include "Knight/Knight.h"
 #include "chessboard/Chessboard.h"
 #include "dts/Queue.h"
+#include "dts/Stack.h"
 
 #include <iostream>
 #include <assert.h>
@@ -37,6 +38,21 @@ namespace KnightTravail
 		{
 			std::cout << "Not on a board" << std::endl;
 		}
+
+		dts::Stack<Position*> stack;
+		for (Position* temp = search; temp != nullptr; temp = temp->m_previousPosition)
+		{
+			stack.Push(temp);
+		}
+		
+		Position* temp = nullptr;
+		while(!stack.isEmpty())
+		{
+			temp = stack.Pop();
+			std::cout <<*temp<<std::endl;
+		}
+
+		std::cout<<"Number of visited squares: " << m_visitedPositions.size() << std::endl;
 
 		return 0;
 	}
@@ -132,7 +148,9 @@ namespace KnightTravail
 
 				if (ChessBoard::inRange(*movedCoordinate) && !isVisited[movedCoordinate->x][movedCoordinate->y])
 				{
+					isVisited[movedCoordinate->x][movedCoordinate->y] = true;
 					queue.Enqueue(new Position(movedCoordinate, currentPosition, currentPosition->m_distance+1));
+					m_visitedPositions.push_back(currentPosition);
 				}
 			}
 		}
