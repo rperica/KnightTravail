@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 
 namespace KnightTravail
 {
@@ -16,12 +17,13 @@ namespace KnightTravail
 	class Position
 	{
 	public:
-		Position* m_previousPosition;
-		Coordinate* coordinate;
+		std::shared_ptr<Position> m_previousPosition;
+		std::shared_ptr<Coordinate> coordinate;
+
 		int m_distance;
 
 	public:
-		Position(Coordinate* coordinate, Position* previousPosition,const int& distance);
+		Position(std::shared_ptr<Coordinate> coordinate, std::shared_ptr<Position> previousPosition, const int& distance);
 		Position(const int& x, const int& y);
 		~Position();
 

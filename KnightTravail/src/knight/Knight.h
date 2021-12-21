@@ -3,16 +3,17 @@
 #include "position/Position.h"
 
 #include <vector>
+#include <memory>
 
 namespace KnightTravail
 {
 	class Knight
 	{
 	private:
-		Position* m_start;
-		Position* m_destination;
+		std::shared_ptr<Position> m_start;
+		std::shared_ptr<Position> m_destination;
 
-		std::vector<Position*> m_visitedPositions;
+		std::vector<std::shared_ptr<Position>> m_visitedPositions;
 
 	public:
 		Knight(const Knight&) = delete;
@@ -22,7 +23,7 @@ namespace KnightTravail
 		
 		int KnightTravail();
 	private:
-		Coordinate* MoveKnight(Coordinate* currentCoordinate, const int& move);
-		Position* FindDestination();
+		std::shared_ptr<Coordinate> MoveKnight(std::shared_ptr<Coordinate> currentCoordinate, const int& move);
+		std::shared_ptr<Position> FindDestination();
 	};
 }

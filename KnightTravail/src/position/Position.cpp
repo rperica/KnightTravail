@@ -4,20 +4,17 @@
 
 namespace KnightTravail
 {
-	Position::Position(Coordinate* coordinate, Position* previous, const int& distance)
+	Position::Position(std::shared_ptr<Coordinate> coordinate, std::shared_ptr<Position> previous, const int& distance)
 		:coordinate(coordinate), 
 		m_previousPosition(previous),
 		m_distance(distance) {}
 
 	Position::Position(const int& x, const int& y):m_previousPosition(nullptr), m_distance(0) 
 	{ 
-		assert(coordinate = new Coordinate(x, y)); 
+		assert(coordinate = std::make_shared<Coordinate>(x, y)); 
 	}
 
-	Position::~Position()
-	{
-		delete coordinate;
-	}
+	Position::~Position() {}
 
 	Coordinate::Coordinate(const int& x, const int& y)
 	{

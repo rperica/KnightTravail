@@ -17,19 +17,15 @@ namespace KnightTravail
 		std::cout << "Enter destination: ";
 		std::cin >> dx >> dy;
 
-		assert(m_start = new Position(sx, sy));
-		assert(m_destination = new Position(dx, dy));
+		assert(m_start = std::make_shared<Position>(sx,sy));
+		assert(m_destination = std::make_shared<Position>(dx, dy));
 	}
 
-	Knight::~Knight()
-	{
-		delete m_start;
-		delete m_destination;
-	}
+	Knight::~Knight() {}
 
 	int Knight::KnightTravail()
 	{
-		Position* search = FindDestination();
+		std::shared_ptr<Position> search = FindDestination();
 		if (search)
 		{
 			std::cout << "Founded at distance: " << search->m_distance<<std::endl;
@@ -39,13 +35,13 @@ namespace KnightTravail
 			std::cout << "Not on a board" << std::endl;
 		}
 
-		dts::Stack<Position*> stack;
-		for (Position* temp = search; temp != nullptr; temp = temp->m_previousPosition)
+		dts::Stack<std::shared_ptr<Position>> stack;
+		for (std::shared_ptr<Position> temp = search; temp != nullptr; temp=temp->m_previousPosition)
 		{
 			stack.Push(temp);
 		}
 		
-		Position* temp = nullptr;
+		std::shared_ptr<Position> temp;
 		while(!stack.isEmpty())
 		{
 			temp = stack.Pop();
@@ -57,9 +53,9 @@ namespace KnightTravail
 		return 0;
 	}
 
-	Coordinate* Knight::MoveKnight(Coordinate* currentCoordinate, const int& move)
+	std::shared_ptr<Coordinate> Knight::MoveKnight(std::shared_ptr<Coordinate> currentCoordinate, const int& move)
 	{
-		Coordinate* newCoordinate = nullptr;
+		std::shared_ptr<Coordinate> newCoordinate;
 
 		int x = currentCoordinate->x;
 		int y = currentCoordinate->y;
@@ -69,56 +65,56 @@ namespace KnightTravail
 		case 1:
 			x += 2;
 			y += 1;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 2:
 			x += 2;
 			y += -1;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 3:
 			x += -2;
 			y += 1;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 4:
 			x += -2;
 			y += -1;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 5:
 			x += 1;
 			y += 2;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 6:
 			x += 1;
 			y += -2;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 7:
 			x += -1;
 			y += 2;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 
 		case 8:
 			x += -1;
 			y += -2;
-			assert(newCoordinate = new Coordinate(x, y));
+			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
 		}
@@ -126,11 +122,11 @@ namespace KnightTravail
 		return nullptr;
 	}
 
-	Position* Knight::FindDestination()
+	std::shared_ptr<Position> Knight::FindDestination()
 	{
-		dts::Queue<Position*> queue;
+		dts::Queue<std::shared_ptr<Position>> queue;
 		bool isVisited[ChessBoard::boardSize][ChessBoard::boardSize] = { false };
-		Position* currentPosition = nullptr;
+		std::shared_ptr<Position> currentPosition;
 		
 		queue.Enqueue(m_start);
 
@@ -144,12 +140,12 @@ namespace KnightTravail
 
 			for (int move = 1; move <= 8; move++)
 			{
-				Coordinate* movedCoordinate = MoveKnight(currentPosition->coordinate, move);
+				std::shared_ptr<Coordinate> movedCoordinate = MoveKnight(currentPosition->coordinate, move);
 
 				if (ChessBoard::inRange(*movedCoordinate) && !isVisited[movedCoordinate->x][movedCoordinate->y])
 				{
 					isVisited[movedCoordinate->x][movedCoordinate->y] = true;
-					queue.Enqueue(new Position(movedCoordinate, currentPosition, currentPosition->m_distance+1));
+					queue.Enqueue(std::make_shared<Position>(movedCoordinate, currentPosition, currentPosition->m_distance+1));
 					m_visitedPositions.push_back(currentPosition);
 				}
 			}

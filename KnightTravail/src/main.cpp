@@ -2,14 +2,12 @@
 
 #include <iostream>
 #include <assert.h>
-
+#include <stack>
 int main()
 {
-	KnightTravail::Knight* knight = nullptr;
-	assert(knight = new KnightTravail::Knight());
+	std::unique_ptr<KnightTravail::Knight> knight = std::make_unique<KnightTravail::Knight>();
 
 	knight->KnightTravail();
 
-	delete knight;
 	return 0;
 }
