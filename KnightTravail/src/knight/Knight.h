@@ -3,7 +3,6 @@
 #include "position/Position.h"
 
 #include <vector>
-#include <memory>
 
 namespace KnightTravail
 {
@@ -23,7 +22,7 @@ namespace KnightTravail
 		
 		int KnightTravail();
 	private:
-		std::shared_ptr<Coordinate> MoveKnight(std::shared_ptr<Coordinate> currentCoordinate, const int& move);
 		std::shared_ptr<Position> FindDestination();
+		std::shared_ptr<Coordinate> MoveKnight(std::shared_ptr<Coordinate> currentCoordinate, const int& move);
 	};
 }

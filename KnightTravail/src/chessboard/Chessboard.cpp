@@ -2,11 +2,8 @@
 
 namespace KnightTravail
 {
-    ChessBoard::ChessBoard()
-    {
-
-    }
-
+    ChessBoard::ChessBoard() {}
+     
     bool ChessBoard::inRange(const Coordinate& coordinate)
     {
         if (coordinate.x > boardSize-1 || coordinate.x < 0)

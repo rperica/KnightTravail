@@ -10,15 +10,17 @@ namespace KnightTravail
 {
 	Knight::Knight()
 	{
-		int sx, sy, dx, dy; 
+		std::string start;
+		std::string destination;
 
-		std::cout << "Enter starting square: ";
-		std::cin >> sx >> sy;
+		std::cout << "Use chess notation in range (a-h)(1-8); example: e4" << std::endl;
+		std::cout << "Enter start: ";
+		std::cin >> start;
 		std::cout << "Enter destination: ";
-		std::cin >> dx >> dy;
+		std::cin >> destination;
 
-		assert(m_start = std::make_shared<Position>(sx,sy));
-		assert(m_destination = std::make_shared<Position>(dx, dy));
+		assert(m_start = std::make_shared<Position>(start));
+		assert(m_destination = std::make_shared<Position>(destination));
 	}
 
 	Knight::~Knight() {}
@@ -28,7 +30,7 @@ namespace KnightTravail
 		std::shared_ptr<Position> search = FindDestination();
 		if (search)
 		{
-			std::cout << "Founded at distance: " << search->m_distance<<std::endl;
+			std::cout << "Founded in " << search->GetDistance() << " moves." << std::endl;
 		}
 		else
 		{
@@ -36,7 +38,7 @@ namespace KnightTravail
 		}
 
 		dts::Stack<std::shared_ptr<Position>> stack;
-		for (std::shared_ptr<Position> temp = search; temp != nullptr; temp=temp->m_previousPosition)
+		for (std::shared_ptr<Position> temp = search; temp != nullptr; temp=temp->GetPreviousPosition())
 		{
 			stack.Push(temp);
 		}
@@ -51,6 +53,38 @@ namespace KnightTravail
 		std::cout<<"Number of visited squares: " << m_visitedPositions.size() << std::endl;
 
 		return 0;
+	}
+
+	std::shared_ptr<Position> Knight::FindDestination()
+	{
+		dts::Queue<std::shared_ptr<Position>> queue;
+		bool isVisited[ChessBoard::boardSize][ChessBoard::boardSize] = { false };
+		std::shared_ptr<Position> currentPosition;
+		
+		queue.Enqueue(m_start);
+
+		while (!queue.isEmpty())
+		{
+			currentPosition = queue.Dequeue();
+			isVisited[currentPosition->GetCordinate()->x][currentPosition->GetCordinate()->y] = true;
+
+			if (*currentPosition==*m_destination)
+				return currentPosition;
+
+			for (int move = 1; move <= 8; move++)
+			{
+				std::shared_ptr<Coordinate> movedCoordinate = MoveKnight(currentPosition->GetCordinate(), move);
+
+				if (ChessBoard::inRange(*movedCoordinate) && !isVisited[movedCoordinate->x][movedCoordinate->y])
+				{
+					isVisited[movedCoordinate->x][movedCoordinate->y] = true;
+					queue.Enqueue(std::make_shared<Position>(movedCoordinate, currentPosition, currentPosition->GetDistance()+1));
+					m_visitedPositions.push_back(currentPosition);
+				}
+			}
+		}
+
+		return nullptr;
 	}
 
 	std::shared_ptr<Coordinate> Knight::MoveKnight(std::shared_ptr<Coordinate> currentCoordinate, const int& move)
@@ -117,38 +151,6 @@ namespace KnightTravail
 			assert(newCoordinate = std::make_shared<Coordinate>(x, y));
 			return newCoordinate;
 			break;
-		}
-
-		return nullptr;
-	}
-
-	std::shared_ptr<Position> Knight::FindDestination()
-	{
-		dts::Queue<std::shared_ptr<Position>> queue;
-		bool isVisited[ChessBoard::boardSize][ChessBoard::boardSize] = { false };
-		std::shared_ptr<Position> currentPosition;
-		
-		queue.Enqueue(m_start);
-
-		while (!queue.isEmpty())
-		{
-			currentPosition = queue.Dequeue();
-			isVisited[currentPosition->coordinate->x][currentPosition->coordinate->y] = true;
-
-			if (*currentPosition==*m_destination)
-				return currentPosition;
-
-			for (int move = 1; move <= 8; move++)
-			{
-				std::shared_ptr<Coordinate> movedCoordinate = MoveKnight(currentPosition->coordinate, move);
-
-				if (ChessBoard::inRange(*movedCoordinate) && !isVisited[movedCoordinate->x][movedCoordinate->y])
-				{
-					isVisited[movedCoordinate->x][movedCoordinate->y] = true;
-					queue.Enqueue(std::make_shared<Position>(movedCoordinate, currentPosition, currentPosition->m_distance+1));
-					m_visitedPositions.push_back(currentPosition);
-				}
-			}
 		}
 
 		return nullptr;
