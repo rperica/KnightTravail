@@ -1,6 +1,8 @@
 #include "position/Position.h"
+#include "chessboard/Chessboard.h"
 
 #include <assert.h>
+#include <vector>
 
 namespace KnightTravail
 {
@@ -36,142 +38,29 @@ namespace KnightTravail
 
 	int Coordinate::ConvertFromChessNotation()
 	{
-		if (chessNotation.size() != 2)
-		{
-			this->x = 99;
-			this->y = 99;
+		const int coordinateY[8] = { 0,1,2,3,4,5,6,7 };
+		const int coordinateX[8] = { 7,6,5,4,3,2,1,0 };
 
-			return 1;
-		}
-
-		switch (chessNotation[0])
-		{
-		case 'a':
-			this->y = 0;
-			break;
-		case 'b':
-			this->y = 1;
-			break;
-		case 'c':
-			this->y = 2;
-			break;
-		case 'd':
-			this->y = 3;
-			break;
-		case 'e':
-			this->y = 4;
-			break;
-		case 'f':
-			this->y = 5;
-			break;
-		case 'g':
-			this->y = 6;
-			break;
-		case 'h':
-			this->y = 7;
-			break;
-		default:
-			this->y = 99;
-			break;
-		}
-
-		switch (chessNotation[1])
-		{
-		case '1':
-			this->x = 7;
-			break;
-		case '2':
-			this->x = 6;
-			break;
-		case '3':
-			this->x = 5;
-			break;
-		case '4':
-			this->x = 4;
-			break;
-		case '5':
-			this->x = 3;
-			break;
-		case '6':
-			this->x = 2;
-			break;
-		case '7':
-			this->x = 1;
-			break;
-		case '8':
-			this->x = 0;
-			break;
-		default:
-			this->y = 99;
-			break;
-		}
+		this->y = coordinateY[chessNotation[0] - 97]; // ASCII 'a' => 97 
+		this->x = coordinateX[chessNotation[1] - 49]; // ASCII '1' => 49
 
 		return 0;
 	}
 
 	int Coordinate::ConvertToChessNotation()
 	{
-		switch (this->y)
+		const char letterNotation[8] = { 'a','b','c','d','e','f','g','h' };
+		const char numberNotation[8] = { '8','7','6','5','4','3','2','1' };
+	
+		if (ChessBoard::inRange(*this))
 		{
-		case 0:
-			chessNotation += 'a';
-			break;
-		case 1:
-			chessNotation += 'b';
-			break;
-		case 2:
-			chessNotation += 'c';
-			break;
-		case 3:
-			chessNotation += 'd';
-			break;
-		case 4:
-			chessNotation += 'e';
-			break;
-		case 5:
-			chessNotation += 'f';
-			break;
-		case 6:
-			chessNotation += 'g';
-			break;
-		case 7:
-			chessNotation += 'h';
-			break;
-		default:
-			break;
-		}
+			chessNotation += letterNotation[this->y];
+			chessNotation += numberNotation[this->x];
 
-		switch (this->x)
-		{
-		case 0:
-			chessNotation += '8';
-			break;
-		case 1:
-			chessNotation += '7';
-			break;
-		case 2:
-			chessNotation += '6';
-			break;
-		case 3:
-			chessNotation += '5';
-			break;
-		case 4:
-			chessNotation += '4';
-			break;
-		case 5:
-			chessNotation += '3';
-			break;
-		case 6:
-			chessNotation += '2';
-			break;
-		case 7:
-			chessNotation += '1';
-			break;
-		default:
-			break;
-		}
+			return 0;
+		}	
 
-		return 0;
+		return 1;
 	}
 
 	bool operator==(const Position& p1, const Position& p2)
