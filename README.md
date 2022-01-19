@@ -11,7 +11,7 @@ Square positions are represented with [chess notation](https://en.wikipedia.org/
 
 ### **Getting Started**
 
-For project generation *Premake5* is used, it is done and tested in Viusal studio 2019 enviroment, so Viusal studio 2019 is recommended. Other development environments are untested.
+For project generation *Premake5* is used, it is done and tested in Visual studio 2019 enviroment, so Visual studio 2019 is recommended. Other development environments are untested.
 
 #### **<ins>1. Downloading the repository</ins>**
 
